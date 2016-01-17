@@ -1,0 +1,206 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-01-17 17:45+0500\n"
+"PO-Revision-Date: 2016-01-17 17:55+0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.6\n"
+
+#: .\store\models.py:14
+msgid "client_name"
+msgstr "клиент"
+
+#: .\store\models.py:15
+msgid "phone"
+msgstr "телефон"
+
+#: .\store\models.py:16 .\store\models.py:39
+msgid "memo"
+msgstr "примечание"
+
+#: .\store\models.py:17 .\store\models.py:36 .\store\models.py:120
+#: .\store\models.py:141 .\store\models.py:163 .\store\models.py:171
+#: .\store\models.py:179
+msgid "debt"
+msgstr "долг"
+
+#: .\store\models.py:18
+msgid "photo"
+msgstr "фото"
+
+#: .\store\models.py:29 .\store\models.py:51 .\store\models.py:59
+#: .\store\models.py:149
+msgid "client"
+msgstr "клиент"
+
+#: .\store\models.py:30
+msgid "clients"
+msgstr "клиенты"
+
+#: .\store\models.py:34 .\store\models.py:92
+msgid "total"
+msgstr "сумма"
+
+#: .\store\models.py:35
+msgid "discount"
+msgstr "скидка"
+
+#: .\store\models.py:37 .\store\models.py:93
+msgid "amount"
+msgstr "оплаченно"
+
+#: .\store\models.py:38 .\store\models.py:94
+msgid "date"
+msgstr "дата"
+
+#: .\store\models.py:54
+msgid "sell from store"
+msgstr "продажа со склада"
+
+#: .\store\models.py:55
+msgid "sales from store"
+msgstr "продажы со склада"
+
+#: .\store\models.py:62
+msgid "direct delivery"
+msgstr "Прямая посавка"
+
+#: .\store\models.py:63
+msgid "direct deliveries"
+msgstr "Прямые поставки"
+
+#: .\store\models.py:69
+msgid "sell from shop"
+msgstr "продажа с магазина"
+
+#: .\store\models.py:70
+msgid "sales from shop"
+msgstr "продажы с магазина"
+
+#: .\store\models.py:76
+msgid "delivery to store"
+msgstr "Приход на склад"
+
+#: .\store\models.py:77
+msgid "deliveries to store"
+msgstr "Приходы на склад"
+
+#: .\store\models.py:86
+msgid "My debt"
+msgstr "мой долг"
+
+#: .\store\models.py:87
+msgid "Client debt"
+msgstr "долг клиента"
+
+#: .\store\models.py:88
+msgid "Sell debt"
+msgstr "долг магазина"
+
+#: .\store\models.py:91
+msgid "debt_type"
+msgstr "вид долга"
+
+#: .\store\models.py:99
+#, python-format
+msgid "Total: %14.2f, Amount: %14.2f, Date: %s"
+msgstr "Сумма: %14.2f, оплаченно: %14.2f, дата: %s"
+
+#: .\store\models.py:102
+msgid "general"
+msgstr "запись в журнал"
+
+#: .\store\models.py:103
+msgid "generals"
+msgstr "Записи журнала"
+
+#: .\store\models.py:115
+msgid "delivery amount"
+msgstr "мой платеж за доставленный товар"
+
+#: .\store\models.py:116
+msgid "delivery amounts"
+msgstr "мои платежы за доставленный товар"
+
+#: .\store\models.py:123
+msgid "delivery debt"
+msgstr "долг по доставке"
+
+#: .\store\models.py:124
+msgid "delivery debts"
+msgstr "долги по доставке"
+
+#: .\store\models.py:136
+msgid "income amount"
+msgstr "мой платеж за оприходованый товар"
+
+#: .\store\models.py:137
+msgid "income amounts"
+msgstr "мои платежи за оприходованые товары"
+
+#: .\store\models.py:144
+msgid "income debt"
+msgstr "долг по приходу"
+
+#: .\store\models.py:145
+msgid "income debts"
+msgstr "долги по приходу"
+
+#: .\store\models.py:158
+msgid "client debt"
+msgstr "долг клиента"
+
+#: .\store\models.py:159
+msgid "client debts"
+msgstr "долги клиента"
+
+#: .\store\models.py:166
+msgid "client debt for delivery"
+msgstr "Долг клиента за товар"
+
+#: .\store\models.py:167
+msgid "client debts for delivery"
+msgstr "Долги клиента за доставку"
+
+#: .\store\models.py:174
+msgid "client debt for invoice"
+msgstr "Долг клиента за товар"
+
+#: .\store\models.py:175
+msgid "client debts for invoice"
+msgstr "Долги клиента за товар"
+
+#: .\store\models.py:194
+msgid "sell debt"
+msgstr "долг магазина"
+
+#: .\store\models.py:195
+msgid "sell debts"
+msgstr "долги магазина"
+
+#: .\store\models.py:206
+msgid "part"
+msgstr "деталь"
+
+#: .\store\models.py:207
+msgid "parts"
+msgstr "детали"
+
+#: .\store\models.py:229
+msgid "part on store"
+msgstr "деталь на складе"
+
+#: .\store\models.py:230
+msgid "parts on store"
+msgstr "детали на складе"
