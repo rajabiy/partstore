@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 from django.contrib.admin.decorators import register
-from django.core import urlresolvers
+from django.utils.translation import ugettext_lazy as _
 
 from store.models import Part, StoreIncome, Store, InvoiceOut, StoreSell, Sell, General, Invoice, Delivery, Client, \
     DeliveryPart, Income, ClientDebt, ClientDeliveryDebt, ClientInvoiceDebt, IncomeDebt, DeliveryDebt, SellDebt, \
@@ -25,9 +25,10 @@ class StoreIncomeInline(admin.TabularInline):
 
 
 class ClientDebtInline(admin.TabularInline):
-    ordering = ['-v_date']
     fields = ('total', 'amount', 'v_date',)
     readonly_fields = ('total',)
+    exclude = ('type',)
+    list_display = ('client', 'v_date', 'total', 'amount',)
     model = ClientDebt
 
 
@@ -38,8 +39,12 @@ class DeliveryPartInline(admin.TabularInline):
 
 @register(Delivery)
 class DeliveryAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('client', ('total', 'discount', 'debt',), ('v_date', 'amount',),),}),
+        (_("memo"), {'classes': ('collapse',), 'fields': ('memo',)}),
+    )
+
     readonly_fields = ('total', 'v_date', 'debt',)
-    fields = ('client', ('total', 'discount', 'debt',), 'amount', 'v_date', 'memo',)
     list_display = ('client', 'amount', 'total', 'discount', 'debt', 'v_date', 'memo',)
     date_hierarchy = 'v_date'
     inlines = [DeliveryPartInline]
@@ -47,8 +52,11 @@ class DeliveryAdmin(admin.ModelAdmin):
     
 @register(Income)
 class IncomeAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (_("Price"), {'fields': (('total', 'discount', 'debt',), ('v_date', 'amount',),),}),
+        (_("memo"), {'classes': ('collapse',), 'fields': ('memo',)}),
+    )
     readonly_fields = ('total', 'v_date', 'debt',)
-    fields = (('total', 'discount', 'debt',), 'amount', 'v_date', 'memo',)
     list_display = ('amount', 'total', 'discount', 'debt', 'v_date', 'memo',)
     date_hierarchy = 'v_date'
     inlines = [StoreIncomeInline]
@@ -56,8 +64,11 @@ class IncomeAdmin(admin.ModelAdmin):
     
 @register(Sell)
 class SellAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (_("Price"), {'fields': (('total', 'discount', 'debt',), ('v_date', 'amount',),),}),
+        (_("memo"), {'classes': ('collapse',), 'fields': ('memo',)}),
+    )
     readonly_fields = ('total', 'v_date', 'debt',)
-    fields = (('total', 'discount', 'debt',), 'amount', 'v_date', 'memo',)
     list_display = ('amount', 'total', 'discount', 'debt', 'v_date', 'memo',)
     date_hierarchy = 'v_date'
     inlines = [StoreSaleInline]
@@ -65,8 +76,11 @@ class SellAdmin(admin.ModelAdmin):
 
 @register(Invoice)    
 class InvoiceAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('client', ('total', 'discount', 'debt',), ('v_date', 'amount',),),}),
+        (_("memo"), {'classes': ('collapse',), 'fields': ('memo',)}),
+    )
     readonly_fields = ('total', 'v_date', 'debt',)
-    fields = ('client', ('total', 'discount', 'debt'), 'amount', 'v_date', 'memo',)
     list_display = ('client', 'debt', 'total', 'discount', 'amount', 'v_date', 'memo',)
     date_hierarchy = 'v_date'
     inlines = [InvoiceOutInline]
@@ -74,8 +88,22 @@ class InvoiceAdmin(admin.ModelAdmin):
 
 @register(Store)
 class StoreAdmin(admin.ModelAdmin):
-    readonly_fields = ('p_income', 'p_outgo', 'p_sell', 'p_count', 's_sum')
-    list_display = ('part', 'p_count', 's_sum')
+    readonly_fields = ('p_income', 'p_outgo', 'p_sell', 'p_count', 's_sum', 'price')
+    list_display = ('part', 'p_count', 'price', 's_sum')
+    actions = ("update_counts", "update_all_counts",)
+
+    def update_counts(self, request, queryset):
+        for obj in queryset:
+            obj.update_counts()
+
+    update_counts.short_description = _("update part counts")
+
+    def update_all_counts(self, request, queryset):
+        all = Store.objects.all()
+        for obj in all:
+            obj.update_counts()
+
+    update_all_counts.short_description = _("update all part counts")
 
 
 @register(Part)
@@ -86,14 +114,16 @@ class PartAdmin(admin.ModelAdmin):
 
 @register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    list_per_page = 5
-    fields = ('name', 'phone', 'saldo', 'memo', 'photo')
+    fieldsets = (
+        (None, {'fields': ('name', 'phone', 'saldo',), }),
+        (_("memo"), {'classes': ('collapse',), 'fields': (('memo', 'photo',), )}),
+    )
     readonly_fields = ('saldo',)
     list_display = ('name', 'saldo', 'phone',)
     inlines = [ClientDebtInline]
 
 
-@register(General, ClientDebt)
+#@register(General)
 class GeneralAdmin(admin.ModelAdmin):
     readonly_fields = ('total', 'amount', 'type', 'v_date')
     date_hierarchy = 'v_date'
@@ -108,7 +138,17 @@ class GeneralAdmin(admin.ModelAdmin):
             return True
 
 
-@register(ClientDeliveryDebt, ClientInvoiceDebt)
+@register(ClientDebt)
+class ClientDebtAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': (('client', 'v_date',), 'amount', ), }),
+    )
+    readonly_fields = ('total',)
+    date_hierarchy = 'v_date'
+    exclude = ('type',)
+    list_display = ('client', 'v_date', 'total', 'amount',)
+
+#@register(ClientDeliveryDebt, ClientInvoiceDebt)
 class ClientDebtAdmin(admin.ModelAdmin):
     readonly_fields = ('total', 'amount', 'type', 'v_date', 'debt', 'client', )
     date_hierarchy = 'v_date'
@@ -126,7 +166,7 @@ class ClientDebtAdmin(admin.ModelAdmin):
         return False
 
 
-@register(IncomeDebt, DeliveryDebt)
+#@register(IncomeDebt, DeliveryDebt)
 class MyDebtAdmin(admin.ModelAdmin):
     readonly_fields = ('v_date', 'debt', 'total', 'amount',)
     date_hierarchy = 'v_date'
@@ -146,7 +186,7 @@ class MyDebtAdmin(admin.ModelAdmin):
 
 @register(IncomeAmount, DeliveryAmount, SellDebt)
 class IncomeAmountAdmin(admin.ModelAdmin):
-    readonly_fields = ( 'total', 'type', 'debt_amount')
+    readonly_fields = ('total', 'type', 'debt_amount')
     list_display = ('v_date', 'total', 'amount',)
     date_hierarchy = 'v_date'
     readonly_fields = ('debt_amount', )

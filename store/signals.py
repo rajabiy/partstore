@@ -70,7 +70,6 @@ def client_debt_upd(sender, instance, created, raw, **kwargs):
         elif sender == Delivery:
             debt_inc, bool = DeliveryDebt.objects.update_or_create(debt=instance)
             debt_inc.total = instance.debt
-            debt_inc.amount = instance.amount
             debt_inc.save()
             debt_clt, bool = ClientDeliveryDebt.objects.update_or_create(client=instance.client, debt=instance)
             debt_clt.total = instance.debt

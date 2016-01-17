@@ -13,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 class Client(models.Model):
     name = models.CharField(max_length=40, verbose_name=_('client_name'))
     phone = models.CharField(max_length=45, blank=True, null=True, verbose_name=_('phone'))
-    memo = models.CharField(max_length=300, blank=True, null=True, verbose_name=_('memo'))
+    memo = models.TextField(blank=True, null=True, verbose_name=_('memo'))
     saldo = models.DecimalField(max_digits=14, decimal_places=2, default=0, verbose_name=_('debt'))
     photo = models.ImageField(blank=True, null=True, verbose_name=_('photo'))
 
@@ -36,7 +36,7 @@ class MainInvoice(models.Model):
     debt = models.DecimalField(max_digits=14, decimal_places=2, default=0, verbose_name=_("debt"))
     amount = models.DecimalField(max_digits=14, decimal_places=2, default=0, verbose_name=_("amount"))
     v_date = models.DateField(default=datetime.date.today, verbose_name=_("date"))
-    memo = models.CharField(max_length=300, blank=True, null=True, verbose_name=_('memo'))
+    memo = models.TextField(blank=True, null=True, verbose_name=_('memo'))
     v_timestamp = models.DateTimeField(auto_now_add=True)
     m_timestamp = models.DateTimeField(auto_now=True)
 
@@ -196,8 +196,8 @@ class SellDebt(General):
 
 
 class Part(models.Model):
-    name = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=14, decimal_places=2)
+    name = models.CharField(max_length=100, verbose_name=_("name"))
+    price = models.DecimalField(max_digits=14, decimal_places=2, verbose_name=_("price"))
 
     def __unicode__(self):
         return '%s %12.2f' % (self.name, self.price)
@@ -208,16 +208,32 @@ class Part(models.Model):
 
 
 class Store(models.Model):
-    part = models.OneToOneField(Part, on_delete=models.CASCADE)
-    p_income = models.IntegerField(default=0)
-    p_outgo = models.IntegerField(default=0)
-    p_sell = models.IntegerField(default=0)
-    p_count = models.IntegerField(default=0)
-    s_sum = models.DecimalField(max_digits=14, decimal_places=2, default=0)
+    part = models.OneToOneField(Part, on_delete=models.CASCADE, verbose_name=_("name"))
+    p_income = models.IntegerField(default=0, verbose_name=_("income"))
+    p_outgo = models.IntegerField(default=0, verbose_name=_("outgo"))
+    p_sell = models.IntegerField(default=0, verbose_name=_("sell"))
+    p_count = models.IntegerField(default=0, verbose_name=_("count"))
+    s_sum = models.DecimalField(max_digits=14, decimal_places=2, default=0, verbose_name=_("total"))
     m_timestamp = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return "%s %f" % (self.part.name, self.part.price)
+
+    def price(self):
+        return self.part.price
+
+    price.short_description = _('price')
+
+    def update_counts(self):
+        p_income = StoreIncome.objects.filter(part=self.part).aggregate(count=Coalesce(Sum('p_count'), 0))
+        p_outgo = InvoiceOut.objects.filter(part=self.part).aggregate(count=Coalesce(Sum('p_count'), 0))
+        p_sell = StoreSell.objects.filter(part=self.part).aggregate(count=Coalesce(Sum('p_count'), 0))
+
+        self.p_income = p_income.get('count', 0)
+        self.p_outgo = p_outgo.get('count', 0)
+        self.p_sell = p_sell.get('count', 0)
+
+        self.save()
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -231,10 +247,11 @@ class Store(models.Model):
 
 
 class MainSell(models.Model):
-    part = models.ForeignKey(Part, on_delete=models.CASCADE, related_name='%(class)s')
-    p_count = models.IntegerField(default=0)
-    total = models.DecimalField(default=0, max_digits=14, decimal_places=2)
-    v_date = models.DateField(default=datetime.date.today)
+    part = models.ForeignKey(Part, on_delete=models.CASCADE, related_name='%(class)s', verbose_name=_("part"))
+    p_count = models.IntegerField(default=0, verbose_name=_("count"))
+    price = models.DecimalField(default=0, max_digits=14, decimal_places=2, verbose_name=_("price"))
+    total = models.DecimalField(default=0, max_digits=14, decimal_places=2, verbose_name=_("total"))
+    v_date = models.DateField(default=datetime.date.today, verbose_name=_("date"))
     v_timestamp = models.DateTimeField(auto_now_add=True)
     m_timestamp = models.DateTimeField(auto_now=True)
 
@@ -243,25 +260,27 @@ class MainSell(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        self.total = self.p_count * self.part.price
+        if self.price == 0:
+            self.price = self.part.price
+        self.total = self.p_count * self.price
 
         super(MainSell, self).save(force_insert, force_update, using)
 
 
 class StoreIncome(MainSell):
-    parent = models.ForeignKey(Income, on_delete=models.CASCADE)
+    parent = models.ForeignKey(Income, on_delete=models.CASCADE, verbose_name=_("income"))
 
 
 class InvoiceOut(MainSell):
-    parent = models.ForeignKey(Invoice, on_delete=models.CASCADE)
+    parent = models.ForeignKey(Invoice, on_delete=models.CASCADE, verbose_name=_("invoice"))
 
 
 class DeliveryPart(MainSell):
-    parent = models.ForeignKey(Delivery, on_delete=models.CASCADE)
+    parent = models.ForeignKey(Delivery, on_delete=models.CASCADE, verbose_name=_("delivery"))
 
 
 class StoreSell(MainSell):
-    parent = models.ForeignKey(Sell, on_delete=models.CASCADE)
+    parent = models.ForeignKey(Sell, on_delete=models.CASCADE, verbose_name=_("sell"))
 
 
 #ToDo total field read only

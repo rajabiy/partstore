@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-17 17:45+0500\n"
-"PO-Revision-Date: 2016-01-17 17:55+0500\n"
+"POT-Creation-Date: 2016-01-17 22:18+0500\n"
+"PO-Revision-Date: 2016-01-17 22:19+0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru_RU\n"
@@ -17,6 +17,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.6\n"
 
+#: .\store\admin.py:44 .\store\admin.py:57 .\store\admin.py:69
+#: .\store\admin.py:81 .\store\admin.py:119 .\store\models.py:16
+#: .\store\models.py:39
+msgid "memo"
+msgstr "примечание"
+
+#: .\store\admin.py:56 .\store\admin.py:68
+msgid "Price"
+msgstr "Цена"
+
+#: .\store\admin.py:99
+msgid "update part counts"
+msgstr "Пересчитать виделенное"
+
+#: .\store\admin.py:106
+msgid "update all part counts"
+msgstr "Пересчитать весь склад"
+
+#: .\store\apps.py:12 .\store\apps.py:13
+msgid "store sales"
+msgstr "Продажи"
+
 #: .\store\models.py:14
 msgid "client_name"
 msgstr "клиент"
@@ -24,10 +46,6 @@ msgstr "клиент"
 #: .\store\models.py:15
 msgid "phone"
 msgstr "телефон"
-
-#: .\store\models.py:16 .\store\models.py:39
-msgid "memo"
-msgstr "примечание"
 
 #: .\store\models.py:17 .\store\models.py:36 .\store\models.py:120
 #: .\store\models.py:141 .\store\models.py:163 .\store\models.py:171
@@ -48,7 +66,8 @@ msgstr "клиент"
 msgid "clients"
 msgstr "клиенты"
 
-#: .\store\models.py:34 .\store\models.py:92
+#: .\store\models.py:34 .\store\models.py:92 .\store\models.py:216
+#: .\store\models.py:253
 msgid "total"
 msgstr "сумма"
 
@@ -60,7 +79,7 @@ msgstr "скидка"
 msgid "amount"
 msgstr "оплаченно"
 
-#: .\store\models.py:38 .\store\models.py:94
+#: .\store\models.py:38 .\store\models.py:94 .\store\models.py:254
 msgid "date"
 msgstr "дата"
 
@@ -131,7 +150,7 @@ msgstr "мой платеж за доставленный товар"
 
 #: .\store\models.py:116
 msgid "delivery amounts"
-msgstr "мои платежы за доставленный товар"
+msgstr "мои платежи за доставленный товар"
 
 #: .\store\models.py:123
 msgid "delivery debt"
@@ -189,7 +208,15 @@ msgstr "долг магазина"
 msgid "sell debts"
 msgstr "долги магазина"
 
-#: .\store\models.py:206
+#: .\store\models.py:199 .\store\models.py:211
+msgid "name"
+msgstr "Наименование"
+
+#: .\store\models.py:200 .\store\models.py:225 .\store\models.py:252
+msgid "price"
+msgstr "Цена"
+
+#: .\store\models.py:206 .\store\models.py:250
 msgid "part"
 msgstr "деталь"
 
@@ -197,10 +224,34 @@ msgstr "деталь"
 msgid "parts"
 msgstr "детали"
 
-#: .\store\models.py:229
+#: .\store\models.py:212 .\store\models.py:271
+msgid "income"
+msgstr "Приход"
+
+#: .\store\models.py:213
+msgid "outgo"
+msgstr "расход"
+
+#: .\store\models.py:214 .\store\models.py:283
+msgid "sell"
+msgstr "продажа"
+
+#: .\store\models.py:215 .\store\models.py:251
+msgid "count"
+msgstr "Количество"
+
+#: .\store\models.py:245
 msgid "part on store"
 msgstr "деталь на складе"
 
-#: .\store\models.py:230
+#: .\store\models.py:246
 msgid "parts on store"
 msgstr "детали на складе"
+
+#: .\store\models.py:275
+msgid "invoice"
+msgstr "счет"
+
+#: .\store\models.py:279
+msgid "delivery"
+msgstr "доставка"
