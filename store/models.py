@@ -6,7 +6,6 @@ import datetime
 from django.db import models
 from django.db.models.aggregates import Sum
 from django.db.models.functions import Coalesce
-from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -39,6 +38,9 @@ class MainInvoice(models.Model):
     memo = models.TextField(blank=True, null=True, verbose_name=_('memo'))
     v_timestamp = models.DateTimeField(auto_now_add=True)
     m_timestamp = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return _("Total: %14.2f, Amount: %14.2f, Date: %s") % (self.total, self.amount, self.v_date)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -105,11 +107,12 @@ class General(models.Model):
 
 class DeliveryAmount(General):
 
-    @property
     def debt_amount(self):
         total = DeliveryAmount.objects.aggregate(total=Coalesce(Sum('total'), 0))
         amount = DeliveryAmount.objects.aggregate(amount=Coalesce(Sum('amount'), 0))
         return total.get('total', 0) - amount.get('amount', 0)
+
+    debt_amount.short_description = _("debt amount")
 
     class Meta:
         verbose_name = _("delivery amount")
@@ -126,11 +129,12 @@ class DeliveryDebt(DeliveryAmount):
 
 class IncomeAmount(General):
 
-    @property
     def debt_amount(self):
         total = IncomeAmount.objects.aggregate(total=Coalesce(Sum('total'), 0))
         amount = IncomeAmount.objects.aggregate(amount=Coalesce(Sum('amount'), 0))
         return total.get('total', 0) - amount.get('amount', 0)
+
+    debt_amount.short_description = _("debt amount")
 
     class Meta:
         verbose_name = _("income amount")
