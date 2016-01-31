@@ -106,7 +106,6 @@ class General(models.Model):
 
 
 class DeliveryAmount(General):
-
     def debt_amount(self):
         total = DeliveryAmount.objects.aggregate(total=Coalesce(Sum('total'), 0))
         amount = DeliveryAmount.objects.aggregate(amount=Coalesce(Sum('amount'), 0))
@@ -127,21 +126,7 @@ class DeliveryDebt(DeliveryAmount):
         verbose_name_plural = _("delivery debts")
 
 
-class IncomeAmount(General):
-
-    def debt_amount(self):
-        total = IncomeAmount.objects.aggregate(total=Coalesce(Sum('total'), 0))
-        amount = IncomeAmount.objects.aggregate(amount=Coalesce(Sum('amount'), 0))
-        return total.get('total', 0) - amount.get('amount', 0)
-
-    debt_amount.short_description = _("debt amount")
-
-    class Meta:
-        verbose_name = _("income amount")
-        verbose_name_plural = _("income amounts")
-
-
-class IncomeDebt(IncomeAmount):
+class IncomeDebt(DeliveryAmount):
     debt = models.OneToOneField(Income, on_delete=models.CASCADE, verbose_name=_("debt"))
 
     class Meta:
@@ -285,6 +270,3 @@ class DeliveryPart(MainSell):
 
 class StoreSell(MainSell):
     parent = models.ForeignKey(Sell, on_delete=models.CASCADE, verbose_name=_("sell"))
-
-
-#ToDo total field read only

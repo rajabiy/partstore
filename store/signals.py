@@ -97,7 +97,3 @@ post_save.connect(general_upd, sender=ClientDeliveryDebt)
 post_delete.connect(general_upd, sender=ClientInvoiceDebt)
 post_delete.connect(general_upd, sender=ClientDebt)
 post_delete.connect(general_upd, sender=ClientDeliveryDebt)
-
-
-
-#todo Расчет и показ долгов

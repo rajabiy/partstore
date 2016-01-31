@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-24 17:46+0500\n"
-"PO-Revision-Date: 2016-01-24 17:46+0500\n"
+"PO-Revision-Date: 2016-01-24 23:08+0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru_RU\n"
@@ -155,11 +155,11 @@ msgstr "сумма долга"
 
 #: .\store\models.py:118
 msgid "delivery amount"
-msgstr "мой платеж за доставленный товар"
+msgstr "расчет за товар"
 
 #: .\store\models.py:119
 msgid "delivery amounts"
-msgstr "мои платежи за доставленный товар"
+msgstr "мои расчеты за товар"
 
 #: .\store\models.py:126
 msgid "delivery debt"
